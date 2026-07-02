@@ -18,15 +18,18 @@ class AppSettingsAdapter extends TypeAdapter<AppSettings> {
     };
     return AppSettings(
       isDark: fields[0] as bool,
+      profileImagePath: fields[1] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, AppSettings obj) {
     writer
-      ..writeByte(1)
+      ..writeByte(2)
       ..writeByte(0)
-      ..write(obj.isDark);
+      ..write(obj.isDark)
+      ..writeByte(1)
+      ..write(obj.profileImagePath);
   }
 
   @override

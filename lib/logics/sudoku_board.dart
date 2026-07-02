@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:games/logics/sudoku_game.dart';
+import 'package:games/services/hive_service.dart';
 
 class SudokuBoard {
+  final isDark = HiveService().getAppSettings().isDark;
   Color selectedColor({required int index, required int selectedIndex}) {
-    if (selectedIndex == 0) {
-      return Colors.white;
+    if (selectedIndex == -1) {
+      return (isDark) ? Colors.white12 : Colors.white;
     }
     if (selectedIndex == index) {
       return Colors.blue;
@@ -19,14 +21,14 @@ class SudokuBoard {
     if (row ~/ 3 == selectedRow ~/ 3 && col ~/ 3 == selectedCol ~/ 3) {
       return Colors.grey;
     }
-    return Colors.white;
+    return (isDark) ? Colors.white12 : Colors.white;
   }
 
   Color textColor(int index, List<List<int>> solvedBoard, List<List<int>> unSolvedBoard) {
     int row = SudokuGame().indexToRow(index);
     int col = SudokuGame().indexToCol(index);
     if (solvedBoard[row][col] == unSolvedBoard[row][col] || unSolvedBoard[row][col] == 0) {
-      return Colors.black;
+      return (isDark) ? Colors.white : Colors.black;
     }
     return Colors.red;
   }
@@ -39,4 +41,46 @@ class SudokuBoard {
       bottom: BorderSide(width: ((index ~/ 9) + 1) % 3 == 0 ? 2 : 0.5),
     );
   }
+
+  // Widget hintOrValue(
+  //   SudokuGame sudokuGame,
+  //   int index,
+  //   List<List<int>> unsolvedBoard,
+  //   bool isHint,
+  //   List<HintData> hintData,
+  // ) {
+  //   HintData hintValue=HintData(0, 0, "");
+  //   for (int i = 0; i < hintData.length; i++) {
+  //     int row = sudokuGame.indexToRow(index);
+  //     int col = sudokuGame.indexToCol(index);
+  //     if (row == hintData[i].row && col == hintData[i].col) {
+  //       hintValue = hintData[i];
+  //     }
+  //   }
+  //   return Center(
+  //     child: (sudokuGame.isValueOrPossibleValue(isHint, unsolvedBoard, index))
+  //         ? Text(
+  //             hintValue.data,
+  //             style: TextStyle(
+  //               fontWeight: FontWeight.w300,
+  //               fontSize: (hintValue.data.length < 6)
+  //                   ? 18
+  //                   : (hintValue.data.length < 12)
+  //                   ? 14
+  //                   : 10.5,
+  //             ),
+  //           )
+  //         : Text(
+  //             sudokuGame.boardValueToString(index, unsolvedBoard),
+  //             style: TextStyle(
+  //               fontSize: 24,
+  //               color: SudokuBoard().textColor(
+  //                 index,
+  //                 sudokuGame.solvedBoard,
+  //                 sudokuGame.unSolvedBoard,
+  //               ),
+  //             ),
+  //           ),
+  //   );
+  // }
 }

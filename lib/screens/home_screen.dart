@@ -16,7 +16,7 @@ class HomeScreen extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: () {
-                context.go(AppRoutes.sudokuScreen);
+                context.push(AppRoutes.sudokuScreen);
               },
               child: Text("Sudoku"),
             ),

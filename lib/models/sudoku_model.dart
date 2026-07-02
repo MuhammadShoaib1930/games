@@ -5,31 +5,26 @@ part 'sudoku_model.g.dart';
 @HiveType(typeId: 1)
 class SudokuModel {
   @HiveField(0)
-  final String userName;
+  final int score;
   @HiveField(1)
-  final List<int> score;
+  final int tries;
   @HiveField(2)
-  final List<String> time;
+  final int level;
   @HiveField(3)
-  final int lost;
+  final int difficulty;
   SudokuModel({
-    required this.userName,
     required this.score,
-    required this.time,
-    required this.lost,
+    required this.tries,
+    required this.level,
+    required this.difficulty,
   });
 
-  SudokuModel copyWith({
-    String? userName,
-    List<int>? score,
-    List<String>? time,
-    int? lost,
-  }) {
+  SudokuModel copyWith({int? score, int? tries, int? level, int? difficulty}) {
     return SudokuModel(
-      userName: userName ?? this.userName,
       score: score ?? this.score,
-      time: time ?? this.time,
-      lost: lost ?? this.lost,
+      tries: tries ?? this.tries,
+      level: level ?? this.level,
+      difficulty: difficulty ?? this.difficulty,
     );
   }
 }

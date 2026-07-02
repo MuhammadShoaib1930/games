@@ -22,30 +22,25 @@ class HiveService {
   Future<void> openBoxes() async {
     settingBox = await Hive.openBox<AppSettings>(settingBoxName);
     sudokuBox = await Hive.openBox<SudokuModel>(sudokuBoxName);
-    defaultValue();
-  }
-
-  Future<void> defaultValue() async {
-    await settingBox!.put(settingBoxName, AppSettings(isDark: false));
-    await sudokuBox!.put(sudokuBoxName, SudokuModel(userName: "", score: [], time: [], lost: 0));
   }
 
   AppSettings getAppSettings() {
-    return settingBox!.get(settingBoxName) ?? AppSettings(isDark: false);
+    return settingBox!.get(settingBoxName) ?? AppSettings(isDark: false, profileImagePath: "");
   }
 
   SudokuModel getSudoku() {
-    return sudokuBox!.get(sudokuBoxName) ?? SudokuModel(userName: "", score: [], time: [], lost: 0);
+    return sudokuBox!.get(sudokuBoxName) ??
+        SudokuModel(score: 0, tries: 3, level: 1, difficulty: 10);
   }
 
-  void updateAppSettings({bool? isDark}) {
-    settingBox!.put(settingBoxName, getAppSettings().copyWith(isDark: isDark));
+  void updateAppSettings({bool? isDark,String? profileImagePath}) {
+    settingBox!.put(settingBoxName, getAppSettings().copyWith(isDark: isDark,profileImagePath: profileImagePath));
   }
 
-  void updateSudoku({int? lost, List<int>? score, List<String>? time, String? userName}) {
+  void updateSudoku({int? score, int? tries, int? level, int? difficulty}) {
     sudokuBox!.put(
       sudokuBoxName,
-      getSudoku().copyWith(lost: lost, score: score, time: time, userName: userName),
+      getSudoku().copyWith(score: score, tries: tries, level: level, difficulty: difficulty),
     );
   }
 

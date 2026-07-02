@@ -17,10 +17,10 @@ class SudokuModelAdapter extends TypeAdapter<SudokuModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return SudokuModel(
-      userName: fields[0] as String,
-      score: (fields[1] as List).cast<int>(),
-      time: (fields[2] as List).cast<String>(),
-      lost: fields[3] as int,
+      score: fields[0] as int,
+      tries: fields[1] as int,
+      level: fields[2] as int,
+      difficulty: fields[3] as int,
     );
   }
 
@@ -29,13 +29,13 @@ class SudokuModelAdapter extends TypeAdapter<SudokuModel> {
     writer
       ..writeByte(4)
       ..writeByte(0)
-      ..write(obj.userName)
-      ..writeByte(1)
       ..write(obj.score)
+      ..writeByte(1)
+      ..write(obj.tries)
       ..writeByte(2)
-      ..write(obj.time)
+      ..write(obj.level)
       ..writeByte(3)
-      ..write(obj.lost);
+      ..write(obj.difficulty);
   }
 
   @override

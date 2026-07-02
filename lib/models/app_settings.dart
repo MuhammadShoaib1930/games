@@ -6,9 +6,14 @@ part 'app_settings.g.dart';
 class AppSettings {
   @HiveField(0)
   final bool isDark;
-  AppSettings({required this.isDark});
+  @HiveField(1)
+  final String profileImagePath;
+  AppSettings({required this.isDark, required this.profileImagePath});
 
-  AppSettings copyWith({bool? isDark}) {
-    return AppSettings(isDark: isDark ?? this.isDark);
+  AppSettings copyWith({bool? isDark, String? profileImagePath}) {
+    return AppSettings(
+      isDark: isDark ?? this.isDark,
+      profileImagePath: profileImagePath ?? this.profileImagePath,
+    );
   }
 }
