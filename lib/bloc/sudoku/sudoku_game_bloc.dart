@@ -40,6 +40,7 @@ class SudokuGameBloc extends Bloc<SudokuGameEvent, SudokuGameState> {
   }
 
   FutureOr<void> _selectValue(SelectValue event, Emitter<SudokuGameState> emit) {
+    emit(state.copyWith(selectedValue: -1));
     SudokuGameState newState = state.copyWith(selectedValue: event.value);
     if (state.selectedValue != event.value) {
       newState = newState.copyWith(selectedValue: event.value);
@@ -49,7 +50,7 @@ class SudokuGameBloc extends Bloc<SudokuGameEvent, SudokuGameState> {
       }
     }
     if (sudokuGame.solved()) {
-      hiveService.updateSudoku(level: state.level+1, score: state.score+10, tries: state.tries,);
+      hiveService.updateSudoku(level: state.level + 1, score: state.score + 10, tries: state.tries);
       add(LevelUpdate());
     } else {
       emit(newState);

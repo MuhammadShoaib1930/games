@@ -5,6 +5,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
 class ImagePickerService {
+  static final ImagePickerService _instance = ImagePickerService._internal();
+  ImagePickerService._internal();
+  factory ImagePickerService() => _instance;
+  
   final ImagePicker picker = ImagePicker();
   XFile? image;
   Future<void> imagePick({bool isCamer = false}) async {

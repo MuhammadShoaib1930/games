@@ -12,15 +12,28 @@ class HomeScreen extends StatelessWidget {
       drawer: AppDrawer(),
       appBar: AppBar(title: Text("Games")),
       body: SafeArea(
-        child: Column(
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                context.push(AppRoutes.sudokuScreen);
-              },
-              child: Text("Sudoku"),
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            spacing: 15,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  context.push(AppRoutes.sudokuScreen);
+                },
+                child: Text("Sudoku"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  context.push(AppRoutes.magicSquareScreen);
+                },
+                child: Text("Magic Square"),
+              ),
+            ],
+          ),
         ),
       ),
     );

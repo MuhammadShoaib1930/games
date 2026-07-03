@@ -1,8 +1,5 @@
 import 'dart:math';
 
-import 'package:games/models/sudoku_model.dart';
-import 'package:games/services/hive_service.dart';
-
 // class HintData {
 //   final String data;
 //   final int row;
@@ -11,7 +8,7 @@ import 'package:games/services/hive_service.dart';
 // }
 
 class SudokuGame {
- SudokuGame._internal();
+  SudokuGame._internal();
   static final SudokuGame instanc = SudokuGame._internal();
   factory SudokuGame() => instanc;
   List<List<int>> solvedBoard = [];
@@ -36,12 +33,8 @@ class SudokuGame {
     _removeElements(removeElementsNo);
   }
 
-  int indexToRow(int index) {
-    return index ~/ 9;
-  }
-
-  int indexToCol(int index) {
-    return index % 9;
+  (int, int) indexToRC(int index) {
+    return ((index ~/ 9), (index % 9));
   }
 
   // void hint(List<List<int>> unsolvedBoard) {
@@ -102,7 +95,8 @@ class SudokuGame {
   // }
 
   (bool, int) addData(int index, int value) {
-    int row = indexToRow(index), col = indexToCol(index);
+    int row, col;
+    (row, col) = indexToRC(index);
     if (index != -1 && value != 0 && unSolvedBoard[row][col] != solvedBoard[row][col]) {
       unSolvedBoard[row][col] = value;
       if (unSolvedBoard[row][col] == solvedBoard[row][col]) {
@@ -128,7 +122,8 @@ class SudokuGame {
   }
 
   List<List<int>> remove(int index, List<List<int>> board) {
-    int row = indexToRow(index), col = indexToCol(index);
+    int row, col;
+    (row, col) = indexToRC(index);
     if (board[row][col] != solvedBoard[row][col]) {
       board[row][col] = 0;
     }
@@ -173,8 +168,8 @@ class SudokuGame {
   }
 
   String boardValueToString(int index, List<List<int>> board) {
-    int row = indexToRow(index);
-    int col = indexToCol(index);
+    int row, col;
+    (row, col) = indexToRC(index);
     if (board[row][col] == 0) {
       return "";
     } else {
@@ -204,6 +199,7 @@ class SudokuGame {
   void _removeElements(int removeElementsNo) {
     removeElementsNo %= 80;
     Random random = Random();
+    
     while (removeElementsNo > 0) {
       int r = random.nextInt(9);
       int c = random.nextInt(9);

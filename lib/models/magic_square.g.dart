@@ -1,38 +1,35 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'app_settings.dart';
+part of 'magic_square.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class AppSettingsAdapter extends TypeAdapter<AppSettings> {
+class MagicSquareAdapter extends TypeAdapter<MagicSquare> {
   @override
-  final int typeId = 0;
+  final int typeId = 2;
 
   @override
-  AppSettings read(BinaryReader reader) {
+  MagicSquare read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return AppSettings(
-      isDark: fields[0] as bool,
-      profileImagePath: fields[1] as String,
-      userName: fields[2] as String,
+    return MagicSquare(
+      score: fields[0] as int,
+      level: fields[1] as int,
     );
   }
 
   @override
-  void write(BinaryWriter writer, AppSettings obj) {
+  void write(BinaryWriter writer, MagicSquare obj) {
     writer
-      ..writeByte(3)
-      ..writeByte(0)
-      ..write(obj.isDark)
-      ..writeByte(1)
-      ..write(obj.profileImagePath)
       ..writeByte(2)
-      ..write(obj.userName);
+      ..writeByte(0)
+      ..write(obj.score)
+      ..writeByte(1)
+      ..write(obj.level);
   }
 
   @override
@@ -41,7 +38,7 @@ class AppSettingsAdapter extends TypeAdapter<AppSettings> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is AppSettingsAdapter &&
+      other is MagicSquareAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

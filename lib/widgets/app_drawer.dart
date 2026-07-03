@@ -1,11 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:games/bloc/theme/theme_cubit.dart';
 import 'package:games/models/app_settings.dart';
 import 'package:games/services/hive_service.dart';
+import 'package:games/widgets/app_drawer_dialog.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -28,9 +27,10 @@ class AppDrawer extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () {
-                        //TODO if user click then show Dialog box where use chose form camera or gallery pick image.
-
-                        // showDialog(context: context, builder: (context) => Dialog());
+                        showDialog(
+                          context: context,
+                          builder: (context) => AppDrawerDialog(isImagePicker: true),
+                        );
                       },
                       child: ValueListenableBuilder(
                         valueListenable: Hive.box<AppSettings>(
@@ -38,8 +38,9 @@ class AppDrawer extends StatelessWidget {
                         ).listenable(),
 
                         builder: (context, Box<AppSettings> box, child) {
-                          final appSettings = box.get(HiveService().settingBoxName);
-                          final String path = appSettings!.profileImagePath;
+                          final String path = HiveService()
+                              .getAppSettings(box: box)
+                              .profileImagePath;
                           return CircleAvatar(
                             backgroundImage: (path.isNotEmpty) ? FileImage(File(path)) : null,
                             backgroundColor: Colors.blue,
@@ -51,21 +52,30 @@ class AppDrawer extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () {
-                        //TODO user edit name or add new name so when user click to open dialog box for rewrite name .
-
-                        // showDialog(context: context, builder: (context) => Dialog());
+                        showDialog(
+                          context: context,
+                          builder: (context) => AppDrawerDialog(isImagePicker: false),
+                        );
                       },
-                      child: Text("name"),
+                      child: ValueListenableBuilder(
+                        valueListenable: HiveService().getListenableAppSettings(),
+                        builder: (context, Box<AppSettings> box, child) {
+                          AppSettings appSettings = HiveService().getAppSettings(box: box);
+                          return Text(
+                            appSettings.userName,
+                            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                          );
+                        },
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
-            BlocSelector<ThemeCubit, ThemeState, bool>(
-              selector: (state) {
-                return state.isDark;
-              },
-              builder: (context, isDark) {
+            ValueListenableBuilder(
+              valueListenable: HiveService().getListenableAppSettings(),
+              builder: (context, Box<AppSettings> box, child) {
+                bool isDark = HiveService().getAppSettings(box: box).isDark;
                 return Row(
                   spacing: 15,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -74,10 +84,7 @@ class AppDrawer extends StatelessWidget {
                     Switch(
                       value: isDark,
                       onChanged: (value) {
-                        HiveService().updateAppSettings(
-                          isDark: !HiveService().getAppSettings().isDark,
-                        );
-                        context.read<ThemeCubit>().themeTogel();
+                        HiveService().updateAppSettings(isDark: value);
                       },
                     ),
                   ],

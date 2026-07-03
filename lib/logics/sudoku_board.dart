@@ -25,8 +25,8 @@ class SudokuBoard {
   }
 
   Color textColor(int index, List<List<int>> solvedBoard, List<List<int>> unSolvedBoard) {
-    int row = SudokuGame().indexToRow(index);
-    int col = SudokuGame().indexToCol(index);
+    int row, col;
+    (row, col) = SudokuGame().indexToRC(index);
     if (solvedBoard[row][col] == unSolvedBoard[row][col] || unSolvedBoard[row][col] == 0) {
       return (isDark) ? Colors.white : Colors.black;
     }
