@@ -13,9 +13,9 @@ class HiveService {
   final String sudokuBoxName = "sudokuModel";
   final String magicSquareBoxName = "magicSquare";
 
-  Box<AppSettings>? settingBox;
-  Box<SudokuModel>? sudokuBox;
-  Box<MagicSquare>? magicSquareBox;
+  late Box<AppSettings> settingBox;
+  late Box<SudokuModel> sudokuBox;
+  late Box<MagicSquare> magicSquareBox;
 
   Future<void> init() async {
     await Hive.initFlutter();
@@ -31,19 +31,20 @@ class HiveService {
     magicSquareBox = await Hive.openBox<MagicSquare>(magicSquareBoxName);
   }
 
-  dynamic getDataFormBox({required Box box}) {
-    if (box is AppSettings) {
+  T getDataFormBox<T>({required Box<T> box}) {
+    if (T == AppSettings) {
       return box.get(settingBoxName) ??
-          AppSettings(isDark: false, profileImagePath: "", userName: "Guest");
-    } else if (box is SudokuModel) {
-      return box.get(sudokuBoxName) ?? SudokuModel(score: 0, tries: 3, level: 1, difficulty: 10);
+          AppSettings(isDark: false, profileImagePath: "", userName: "Guest") as T;
+    } else if (T == SudokuModel) {
+      return box.get(sudokuBoxName) ??
+          SudokuModel(score: 0, tries: 3, level: 1, difficulty: 10) as T;
     } else {
-      return box.get(magicSquareBoxName) ?? MagicSquare(level: 1, score: 0);
+      return box.get(magicSquareBoxName) ?? MagicSquare(level: 1, score: 0) as T;
     }
   }
 
-  dynamic updateBoxData({
-    required Box box,
+  void updateBoxData<T>({
+    required Box<T> box,
     bool? isDark,
     String? profileImagePath,
     String? userName,
@@ -52,73 +53,31 @@ class HiveService {
     int? level,
     int? difficulty,
   }) {
-    if (box is AppSettings) {
+    if (T == AppSettings) {
+      final data = getDataFormBox<T>(box: box) as AppSettings;
       box.put(
         settingBoxName,
-        getAppSettings().copyWith(
-          isDark: isDark,
-          profileImagePath: profileImagePath,
-          userName: userName,
-        ),
+        data.copyWith(isDark: isDark, profileImagePath: profileImagePath, userName: userName) as T,
       );
-    } else if (box is SudokuModel) {
+    } else if (T == SudokuModel) {
+      final data = getDataFormBox<T>(box: box) as SudokuModel;
       box.put(
         sudokuBoxName,
-        getSudoku().copyWith(score: score, tries: tries, level: level, difficulty: difficulty),
+        data.copyWith(score: score, tries: tries, level: level, difficulty: difficulty) as T,
       );
     } else {
-      box.put(magicSquareBoxName, getDataFormBox(box: box).copyWith(score: score, level: level));
+      final data = getDataFormBox<T>(box: box) as MagicSquare;
+      box.put(magicSquareBoxName, data.copyWith(score: score, level: level) as T);
     }
   }
 
-  AppSettings getAppSettings({Box<AppSettings>? box}) {
-    if (box != null) {
-      settingBox = box;
-    }
-    return settingBox!.get(settingBoxName) ??
-        AppSettings(isDark: false, profileImagePath: "", userName: "Guest");
-  }
-
-  SudokuModel getSudoku() {
-    return sudokuBox!.get(sudokuBoxName) ??
-        SudokuModel(score: 0, tries: 3, level: 1, difficulty: 10);
-  }
-
-  void updateAppSettings({bool? isDark, String? profileImagePath, String? userName}) {
-    settingBox!.put(
-      settingBoxName,
-      getAppSettings().copyWith(
-        isDark: isDark,
-        profileImagePath: profileImagePath,
-        userName: userName,
-      ),
-    );
-  }
-
-  void updateSudoku({int? score, int? tries, int? level, int? difficulty}) {
-    sudokuBox!.put(
-      sudokuBoxName,
-      getSudoku().copyWith(score: score, tries: tries, level: level, difficulty: difficulty),
-    );
-  }
-
-  ValueListenable<Box<AppSettings>> getListenableAppSettings() {
-    return settingBox!.listenable(keys: [settingBoxName]);
-  }
-
-  ValueListenable<Box<dynamic>> getListenableAppSettingsFormBox({required Box box}) {
-    String key = "";
-    if (box is AppSettings) {
-      key = sudokuBoxName;
-    } else if (box is SudokuModel) {
-      key = sudokuBoxName;
+  ValueListenable<Box<T>> getListenableAppSettingsFormBox<T>({required Box<T> box}) {
+    if (T == AppSettings) {
+      return box.listenable();
+    } else if (T == SudokuModel) {
+      return box.listenable();
     } else {
-      key = magicSquareBoxName;
+      return box.listenable();
     }
-    return box.listenable(keys: [key]);
-  }
-
-  ValueListenable<Box<SudokuModel>> getListenableSudoku() {
-    return sudokuBox!.listenable(keys: [sudokuBoxName]);
   }
 }

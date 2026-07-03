@@ -26,7 +26,9 @@ class SudokuGameBloc extends Bloc<SudokuGameEvent, SudokuGameState> {
   FutureOr<void> _refresh(Refresh event, Emitter<SudokuGameState> emit) {
     sudokuGame.sudokuGenerate(state.difficulty);
 
-    final SudokuModel sudokuModel = HiveService().getSudoku();
+    final SudokuModel sudokuModel = HiveService().getDataFormBox<SudokuModel>(
+      box: HiveService().sudokuBox,
+    );
     sudokuGame.sudokuGenerate(sudokuModel.difficulty);
     emit(
       state.copyWith(
@@ -50,7 +52,12 @@ class SudokuGameBloc extends Bloc<SudokuGameEvent, SudokuGameState> {
       }
     }
     if (sudokuGame.solved()) {
-      hiveService.updateSudoku(level: state.level + 1, score: state.score + 10, tries: state.tries);
+      hiveService.updateBoxData<SudokuModel>(
+        box: HiveService().sudokuBox,
+        level: state.level + 1,
+        score: state.score + 10,
+        tries: state.tries,
+      );
       add(LevelUpdate());
     } else {
       emit(newState);
@@ -65,7 +72,12 @@ class SudokuGameBloc extends Bloc<SudokuGameEvent, SudokuGameState> {
       newState = fillBoard(newState);
     }
     if (sudokuGame.solved()) {
-      hiveService.updateSudoku(level: state.level, score: state.score, tries: state.tries);
+      hiveService.updateBoxData<SudokuModel>(
+        box: HiveService().sudokuBox,
+        level: state.level,
+        score: state.score,
+        tries: state.tries,
+      );
       add(LevelUpdate());
     } else {
       emit(newState);

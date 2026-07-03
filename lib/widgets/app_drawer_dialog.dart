@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:games/models/app_settings.dart';
 import 'package:games/services/hive_service.dart';
 import 'package:games/services/image_picker_service.dart';
 import 'package:go_router/go_router.dart';
@@ -11,7 +12,9 @@ class AppDrawerDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    nameController.text = HiveService().getAppSettings().userName;
+    nameController.text = HiveService()
+        .getDataFormBox<AppSettings>(box: HiveService().settingBox)
+        .userName;
     return Dialog(
       child: SizedBox(
         height: 200.h,
@@ -72,7 +75,8 @@ class AppDrawerDialog extends StatelessWidget {
                           });
                         } else {
                           if (nameController.value.text.toString().isNotEmpty) {
-                            HiveService().updateAppSettings(
+                            HiveService().updateBoxData<AppSettings>(
+                              box: HiveService().settingBox,
                               userName: nameController.value.text.toString().trim().toUpperCase(),
                             );
                             if (context.mounted) context.pop();

@@ -14,13 +14,15 @@ class MyApp extends StatelessWidget {
       designSize: const Size(360, 690),
       minTextAdapt: true,
       splitScreenMode: true,
-      child: ValueListenableBuilder(
-        valueListenable: HiveService().getListenableAppSettings(),
+      child: ValueListenableBuilder<Box<AppSettings>>(
+        valueListenable: HiveService().getListenableAppSettingsFormBox<AppSettings>(
+          box: HiveService().settingBox,
+        ),
         builder: (context, Box<AppSettings> box, child) {
           return MaterialApp.router(
             debugShowCheckedModeBanner: false,
 
-            theme: (HiveService().getAppSettings(box: box).isDark)
+            theme: (HiveService().getDataFormBox<AppSettings>(box: box).isDark)
                 ? ThemeData.dark()
                 : ThemeData.light(),
             routerConfig: AppRoutes.routes,

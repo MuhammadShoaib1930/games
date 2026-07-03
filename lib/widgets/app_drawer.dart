@@ -33,13 +33,13 @@ class AppDrawer extends StatelessWidget {
                         );
                       },
                       child: ValueListenableBuilder(
-                        valueListenable: Hive.box<AppSettings>(
-                          HiveService().settingBoxName,
-                        ).listenable(),
+                        valueListenable: HiveService().getListenableAppSettingsFormBox<AppSettings>(
+                          box: HiveService().settingBox,
+                        ),
 
                         builder: (context, Box<AppSettings> box, child) {
                           final String path = HiveService()
-                              .getAppSettings(box: box)
+                              .getDataFormBox<AppSettings>(box: box)
                               .profileImagePath;
                           return CircleAvatar(
                             backgroundImage: (path.isNotEmpty) ? FileImage(File(path)) : null,
@@ -58,9 +58,13 @@ class AppDrawer extends StatelessWidget {
                         );
                       },
                       child: ValueListenableBuilder(
-                        valueListenable: HiveService().getListenableAppSettings(),
+                        valueListenable: HiveService().getListenableAppSettingsFormBox<AppSettings>(
+                          box: HiveService().settingBox,
+                        ),
                         builder: (context, Box<AppSettings> box, child) {
-                          AppSettings appSettings = HiveService().getAppSettings(box: box);
+                          AppSettings appSettings = HiveService().getDataFormBox<AppSettings>(
+                            box: box,
+                          );
                           return Text(
                             appSettings.userName,
                             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -73,9 +77,11 @@ class AppDrawer extends StatelessWidget {
               ),
             ),
             ValueListenableBuilder(
-              valueListenable: HiveService().getListenableAppSettings(),
+              valueListenable: HiveService().getListenableAppSettingsFormBox<AppSettings>(
+                box: HiveService().settingBox,
+              ),
               builder: (context, Box<AppSettings> box, child) {
-                bool isDark = HiveService().getAppSettings(box: box).isDark;
+                bool isDark = HiveService().getDataFormBox<AppSettings>(box: box).isDark;
                 return Row(
                   spacing: 15,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -84,7 +90,10 @@ class AppDrawer extends StatelessWidget {
                     Switch(
                       value: isDark,
                       onChanged: (value) {
-                        HiveService().updateAppSettings(isDark: value);
+                        HiveService().updateBoxData<AppSettings>(
+                          box: HiveService().settingBox,
+                          isDark: value,
+                        );
                       },
                     ),
                   ],

@@ -6,12 +6,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:games/bloc/sudoku/sudoku_game_bloc.dart';
 import 'package:games/logics/sudoku_board.dart';
 import 'package:games/logics/sudoku_game.dart';
+import 'package:games/models/app_settings.dart';
 import 'package:games/services/hive_service.dart';
 import 'package:games/widgets/app_sudoku_dialog.dart';
 import 'package:go_router/go_router.dart';
 
 class SudokuScreen extends StatelessWidget {
-  final bool isDark = HiveService().getAppSettings().isDark;
+  final bool isDark = HiveService()
+      .getDataFormBox<AppSettings>(box: HiveService().settingBox)
+      .isDark;
   final SudokuGame sudokuGame = SudokuGame();
   SudokuScreen({super.key});
 
@@ -161,7 +164,7 @@ class SudokuScreen extends StatelessWidget {
                                   ? Colors.blue
                                   : (isDark)
                                   ? Colors.grey[900]
-                                  : Colors.grey[100], 
+                                  : Colors.grey[100],
                               child: Center(
                                 child: Text(
                                   (index + 1).toString(),

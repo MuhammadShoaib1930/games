@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:games/logics/sudoku_game.dart';
+import 'package:games/models/app_settings.dart';
 import 'package:games/services/hive_service.dart';
 
 class SudokuBoard {
-  final isDark = HiveService().getAppSettings().isDark;
+  final isDark = HiveService().getDataFormBox<AppSettings>(box: HiveService().settingBox).isDark;
   Color selectedColor({required int index, required int selectedIndex}) {
     if (selectedIndex == -1) {
       return (isDark) ? Colors.white12 : Colors.white;
