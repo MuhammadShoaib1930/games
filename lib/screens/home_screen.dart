@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:games/core/routes/app_routes.dart';
+import 'package:games/logics/magic_square_logic.dart';
+import 'package:games/models/magic_square.dart';
 import 'package:games/widgets/app_drawer.dart';
 import 'package:go_router/go_router.dart';
 

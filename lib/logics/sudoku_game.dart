@@ -33,9 +33,7 @@ class SudokuGame {
     _removeElements(removeElementsNo);
   }
 
-  (int, int) indexToRC(int index) {
-    return ((index ~/ 9), (index % 9));
-  }
+  (int, int) indexToRC(int index) => ((index ~/ 9), (index % 9));
 
   // void hint(List<List<int>> unsolvedBoard) {
   //   for (int i = 0; i < 9; i++) {
@@ -197,9 +195,9 @@ class SudokuGame {
   // }
 
   void _removeElements(int removeElementsNo) {
-    removeElementsNo %= 80;
+    removeElementsNo = (removeElementsNo >= 80) ? 80 : removeElementsNo;
     Random random = Random();
-    
+
     while (removeElementsNo > 0) {
       int r = random.nextInt(9);
       int c = random.nextInt(9);
