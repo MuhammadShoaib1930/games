@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:games/bloc/magic_square/magic_square_bloc.dart';
 import 'package:games/bloc/sudoku/sudoku_game_bloc.dart';
 import 'package:games/screens/home_screen.dart';
 import 'package:games/screens/magic_square_screen.dart';
@@ -21,7 +22,13 @@ class AppRoutes {
           child: SudokuScreen(),
         ),
       ),
-      GoRoute(path: magicSquareScreen, builder: (context, state) => MagicSquareScreen()),
+      GoRoute(
+        path: magicSquareScreen,
+        builder: (context, state) => BlocProvider(
+          create: (context) => MagicSquareBloc()..add(Inital()),
+          child: MagicSquareScreen(),
+        ),
+      ),
     ],
   );
 }
