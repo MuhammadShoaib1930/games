@@ -12,7 +12,21 @@ class MagicSquareScreen extends StatelessWidget {
     magicSquareLogic.generateBoard(8);
     TextStyle textStyle = TextStyle(fontSize: 18);
     return Scaffold(
-      appBar: AppBar(title: Text("Magic Square"), centerTitle: true),
+      appBar: AppBar(
+        title: BlocBuilder<MagicSquareBloc, MagicSquareState>(
+          builder: (context, state) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Score: ${state.score}", style: textStyle),
+                Text("Level: ${state.level}", style: textStyle),
+                Text(1.toString(), style: textStyle),
+              ],
+            );
+          },
+        ),
+        centerTitle: true,
+      ),
       body: BlocBuilder<MagicSquareBloc, MagicSquareState>(
         builder: (context, state) {
           return SafeArea(
@@ -23,12 +37,6 @@ class MagicSquareScreen extends StatelessWidget {
                 spacing: 10,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [Text("Level ${state.level}", style: textStyle)],
-                    ),
-                  ),
                   SizedBox(
                     child: GridView.builder(
                       shrinkWrap: true,
@@ -86,6 +94,18 @@ class MagicSquareScreen extends StatelessWidget {
                                 ),
                               )
                             : SizedBox(),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    child: ElevatedButton(
+                      onPressed: () => context.read<MagicSquareBloc>().add(Remove()),
+                      child: Text(
+                        "Remove",
+                        style: TextStyle(
+                          color: (state.isRemove) ? Colors.blue : Colors.grey[300],
+                          fontSize: (state.isRemove) ? 18 : 14,
+                        ),
                       ),
                     ),
                   ),

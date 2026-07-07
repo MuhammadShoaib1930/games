@@ -9,7 +9,6 @@ class MagicSquareLogic {
       [3, 5, 7],
       [4, 9, 2],
     ];
-    diffecalty = (diffecalty >= 9) ? 8 : diffecalty;
     return _removeElements(diffecalty, _swapRow(baseBoard));
   }
 
@@ -45,9 +44,28 @@ class MagicSquareLogic {
       diagnal1 += unsolvedBoard[i][i];
       diagnal2 += unsolvedBoard[i][2 - i];
     }
-    if (rows == 15 && column == 15 && diagnal1 == 15 && diagnal2 == 15) return true;
+    if (rows == 15 && column == 15 && diagnal1 == 15 && diagnal2 == 15) {
+      return true;
+    }
 
     return false;
+  }
+
+  (List<List<int>>, List<int>) removeElement(
+    List<List<int>> board,
+    List<int> removeList,
+    int index,
+  ) {
+    int r, c;
+    (r, c) = indexToRC(index);
+    int value = 0;
+    if (board[r][c] != 0) {
+      value = board[r][c];
+      board[r][c] = 0;
+      removeList.add(value);
+    }
+    removeList.sort();
+    return (board, removeList);
   }
 
   String boardValueToString(int index, List<List<int>> unsolvedBoard) {
@@ -65,7 +83,7 @@ class MagicSquareLogic {
   (List<List<int>>, List<int>) _removeElements(int removeElementsNo, List<List<int>> baseBoard) {
     List<int> removeList = [];
     List<List<int>> unsolvedBoard = baseBoard;
-    removeElementsNo = (removeElementsNo >= 8) ? 7 : removeElementsNo;
+    removeElementsNo = (removeElementsNo >= 9) ? 8 : removeElementsNo;
     Random random = Random();
     while (removeElementsNo > 0) {
       int r = random.nextInt(3);

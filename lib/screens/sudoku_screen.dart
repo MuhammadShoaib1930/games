@@ -21,7 +21,22 @@ class SudokuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("SudokuBoard"), centerTitle: true),
+      appBar: AppBar(
+        title: BlocBuilder<SudokuGameBloc, SudokuGameState>(
+          builder: (context, state) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Score: ${state.score}", style: TextStyle(fontSize: 24)),
+
+                Text("Level: ${state.level}", style: TextStyle(fontSize: 24)),
+                Text(state.tries.toString(), style: TextStyle(fontSize: 18)),
+              ],
+            );
+          },
+        ),
+        centerTitle: true,
+      ),
 
       body: BlocBuilder<SudokuGameBloc, SudokuGameState>(
         builder: (context, state) {
@@ -30,23 +45,10 @@ class SudokuScreen extends StatelessWidget {
           }
           return SafeArea(
             child: Padding(
-              padding: EdgeInsetsGeometry.all(2),
+              padding: EdgeInsetsGeometry.only(top: 15,left: 1,right: 1),
               child: Column(
                 spacing: 15,
                 children: [
-                  SizedBox(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 2, right: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("Score: ${state.score}", style: TextStyle(fontSize: 24)),
-                          Text("Tries: ${state.tries}", style: TextStyle(fontSize: 24)),
-                          Text("Level: ${state.level}", style: TextStyle(fontSize: 24)),
-                        ],
-                      ),
-                    ),
-                  ),
                   SizedBox(
                     child: GridView.builder(
                       shrinkWrap: true,
@@ -106,6 +108,7 @@ class SudokuScreen extends StatelessWidget {
                       },
                     ),
                   ),
+
                   SizedBox(
                     child: Align(
                       alignment: AlignmentGeometry.centerEnd,

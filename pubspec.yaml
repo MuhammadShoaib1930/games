@@ -43,6 +43,7 @@ dependencies:
   equatable: ^2.0.8
   flutter_screenutil: ^5.9.3
   shimmer: ^3.0.0
+  wakelock_plus: ^1.6.1
 
 
 dev_dependencies:

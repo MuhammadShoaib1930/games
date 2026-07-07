@@ -22,3 +22,5 @@ final class Fill extends MagicSquareEvent {
 }
 
 final class Inital extends MagicSquareEvent {}
+
+final class Remove extends MagicSquareEvent {}

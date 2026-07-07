@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:games/models/app_settings.dart';
 import 'package:games/services/hive_service.dart';
+import 'package:games/widgets/app_about_dialog.dart';
 import 'package:games/widgets/app_drawer_dialog.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -99,6 +100,11 @@ class AppDrawer extends StatelessWidget {
                   ],
                 );
               },
+            ),
+            ElevatedButton.icon(
+              onPressed: () => showDialog(context: context, builder: (context) => AppAboutDialog()),
+              label: Text("About"),
+              icon: Icon(Icons.info_rounded),
             ),
           ],
         ),
