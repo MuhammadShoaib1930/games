@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
+import 'package:games/bloc/stroop_text/strooptext_bloc.dart';
 import 'package:games/models/app_settings.dart';
 import 'package:games/models/magic_square.dart';
+import 'package:games/models/stroop_model.dart';
 import 'package:games/models/sudoku_model.dart';
 import 'package:hive_flutter/adapters.dart';
 
@@ -12,16 +14,19 @@ class HiveService {
   final String settingBoxName = "settingBox";
   final String sudokuBoxName = "sudokuModel";
   final String magicSquareBoxName = "magicSquare";
+  final String stroopBoxName = "stroopModel";
 
   late Box<AppSettings> settingBox;
   late Box<SudokuModel> sudokuBox;
   late Box<MagicSquare> magicSquareBox;
+  late Box<StroopModel> stroopBox;
 
   Future<void> init() async {
     await Hive.initFlutter();
     Hive.registerAdapter(AppSettingsAdapter());
     Hive.registerAdapter(SudokuModelAdapter());
     Hive.registerAdapter(MagicSquareAdapter());
+    Hive.registerAdapter(StroopModelAdapter());
     await openBoxes();
   }
 
@@ -29,6 +34,7 @@ class HiveService {
     settingBox = await Hive.openBox<AppSettings>(settingBoxName);
     sudokuBox = await Hive.openBox<SudokuModel>(sudokuBoxName);
     magicSquareBox = await Hive.openBox<MagicSquare>(magicSquareBoxName);
+    stroopBox = await Hive.openBox<StroopModel>(stroopBoxName);
   }
 
   T getDataFormBox<T>({required Box<T> box}) {
@@ -38,8 +44,11 @@ class HiveService {
     } else if (T == SudokuModel) {
       return box.get(sudokuBoxName) ??
           SudokuModel(score: 0, tries: 3, level: 1, difficulty: 10) as T;
-    } else {
+    } else if (T == MagicSquare) {
       return box.get(magicSquareBoxName) ?? MagicSquare(level: 1, score: 0) as T;
+    } else {
+      return box.get(stroopBoxName) ??
+          StroopModel(stropTextMaxScore: 0, stropEffectMaxScore: 0) as T;
     }
   }
 
@@ -52,6 +61,7 @@ class HiveService {
     int? tries,
     int? level,
     int? difficulty,
+    bool isStroopText = false,
   }) {
     if (T == AppSettings) {
       final data = getDataFormBox<T>(box: box) as AppSettings;
@@ -65,9 +75,19 @@ class HiveService {
         sudokuBoxName,
         data.copyWith(score: score, tries: tries, level: level, difficulty: difficulty) as T,
       );
-    } else {
+    } else if (T == MagicSquare) {
       final data = getDataFormBox<T>(box: box) as MagicSquare;
       box.put(magicSquareBoxName, data.copyWith(score: score, level: level) as T);
+    } else {
+      final data = getDataFormBox<T>(box: box) as StroopModel;
+      box.put(
+        stroopBoxName,
+        data.copyWith(
+              stropTextMaxScore: (isStroopText) ? score : data.stropTextMaxScore,
+              stropEffectMaxScore: (isStroopText) ? data.stropEffectMaxScore : score,
+            )
+            as T,
+      );
     }
   }
 
@@ -79,5 +99,9 @@ class HiveService {
     } else {
       return box.listenable();
     }
+  }
+
+  bool isDark() {
+    return getDataFormBox<AppSettings>(box: settingBox).isDark;
   }
 }

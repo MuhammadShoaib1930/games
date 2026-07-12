@@ -32,6 +32,18 @@ class HomeScreen extends StatelessWidget {
                 },
                 child: Text("Magic Square"),
               ),
+              ElevatedButton(
+                onPressed: () {
+                  context.push(AppRoutes.stroopTextScreen);
+                },
+                child: Text("Stroop Text"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  context.push(AppRoutes.stroopEffectScreen);
+                },
+                child: Text("Stroop Effect"),
+              ),
             ],
           ),
         ),
