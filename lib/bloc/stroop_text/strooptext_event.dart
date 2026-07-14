@@ -16,3 +16,9 @@ class Solved extends StrooptextEvent {
 }
 
 class InitalStropText extends StrooptextEvent {}
+
+class StartTimer extends StrooptextEvent {}
+
+class ResetTimer extends StrooptextEvent {}
+
+class Tick extends StrooptextEvent {}

@@ -19,7 +19,7 @@ class StroopEffectScreen extends StatelessWidget {
           builder: (context, state) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [Text("${state.scoreEffect} "), Text("Target: ${state.targetScoreEffect}")],
+              children: [Text("${state.scoreEffect} "), Text("Target: ${state.targetScoreEffect} "),Text("${state.seconds}")],
             );
           },
         ),

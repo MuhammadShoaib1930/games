@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -61,5 +62,4 @@ class StroopLogic {
     return listName[list[Random().nextInt(list.length)]];
   }
 
-  
 }
