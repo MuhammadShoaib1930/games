@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,7 +18,11 @@ class StroopTextScreen extends StatelessWidget {
           builder: (context, state) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [Text("${state.scoreText} "), Text("Target: ${state.targetScoreText}")],
+              children: [
+                Text("${state.scoreText} "),
+                Text("Target: ${state.targetScoreText} "),
+                Text("${state.seconds}"),
+              ],
             );
           },
         ),
@@ -30,25 +36,31 @@ class StroopTextScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               spacing: 15,
               children: [
-                Text("second", style: TextStyle(fontSize: 18)),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadiusGeometry.circular(50.r),
-                      color: (HiveService().isDark())
-                          ? Colors.grey
-                          : (state.correctValueIndex == 1)
-                          ? Colors.grey
-                          : Colors.transparent,
-                    ),
-                    child: Center(
-                      child: Text(
-                        StroopLogic().mainTextName(state.optionsList),
-                        style: TextStyle(
-                          fontSize: 88,
-                          fontWeight: FontWeight.bold,
-                          color: StroopLogic().mainTextColor(state.correctValueIndex),
+                  child: Center(
+                    child: Container(
+                      height: 200.h,
+                      width: 300.w,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadiusGeometry.circular(50.r),
+
+                        color: (HiveService().isDark())
+                            ? (state.correctValueIndex == 0)
+                                  ? Colors.grey[100]
+                                  : Colors.transparent
+                            : (state.correctValueIndex == 1)
+                            ? Colors.black38
+                            : Colors.transparent,
+                      ),
+                      child: Center(
+                        child: Text(
+                          "${state.text.toUpperCase()} ",
+                          style: TextStyle(
+                            fontSize: 45,
+                            fontWeight: FontWeight.bold,
+                            color: StroopLogic().mainTextColor(state.correctValueIndex),
+                          ),
                         ),
                       ),
                     ),
@@ -62,7 +74,7 @@ class StroopTextScreen extends StatelessWidget {
                     itemBuilder: (context, index) => Card(
                       child: InkWell(
                         onTap: () => context.read<StrooptextBloc>().add(
-                          Solved(userSelected: state.optionsList[index], isText: true),
+                          Solved(userSelected: state.optionsList[index], isText: false),
                         ),
                         child: Center(
                           // heightFactor: 100.r,

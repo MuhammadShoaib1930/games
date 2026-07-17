@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:games/bloc/magic_square/magic_square_bloc.dart';
 import 'package:games/logics/stroop_logic.dart';
 import 'package:games/models/stroop_model.dart';
 import 'package:games/services/hive_service.dart';
@@ -11,6 +10,7 @@ part 'strooptext_event.dart';
 part 'strooptext_state.dart';
 
 class StrooptextBloc extends Bloc<StrooptextEvent, StrooptextState> {
+  int time = 60;
   Timer? _timer;
   StroopLogic stroopLogic = StroopLogic();
   StrooptextBloc() : super(StrooptextState()) {
@@ -40,6 +40,7 @@ class StrooptextBloc extends Bloc<StrooptextEvent, StrooptextState> {
       int index = 0;
       List<int> list = [];
       (index, list) = stroopLogic.generateNew();
+      time = (time < 6) ? 5 : time - 5;
       add(ResetTimer());
       emit(
         state.copyWith(
@@ -47,9 +48,11 @@ class StrooptextBloc extends Bloc<StrooptextEvent, StrooptextState> {
           optionsList: list,
           scoreText: state.scoreText + 10,
           scoreEffect: state.scoreEffect + 10,
+          text: StroopLogic().mainTextName(state.optionsList),
         ),
       );
     } else {
+      time = 60;
       add(ResetTimer());
       add(InitalStropText());
     }
@@ -60,7 +63,7 @@ class StrooptextBloc extends Bloc<StrooptextEvent, StrooptextState> {
     List<int> list = [];
     (selctedValue, list) = stroopLogic.generateNew();
     StroopModel stroopModel = hiveService.getDataFormBox(box: hiveService.stroopBox);
-    add(StartTimer());
+
     emit(
       StrooptextState(
         correctValueIndex: selctedValue,
@@ -69,6 +72,7 @@ class StrooptextBloc extends Bloc<StrooptextEvent, StrooptextState> {
         targetScoreText: stroopModel.stropTextMaxScore,
         scoreEffect: 0,
         targetScoreEffect: stroopModel.stropEffectMaxScore,
+        text: StroopLogic().mainTextName(state.optionsList),
       ),
     );
   }
@@ -76,7 +80,7 @@ class StrooptextBloc extends Bloc<StrooptextEvent, StrooptextState> {
   void _startTimer(StartTimer event, Emitter<StrooptextState> emit) {
     _timer?.cancel();
 
-    emit(state.copyWith(seconds: 60, gameOver: false));
+    emit(state.copyWith(seconds: time));
 
     _timer = Timer.periodic(const Duration(seconds: 1), (_) => add(Tick()));
   }
@@ -89,8 +93,8 @@ class StrooptextBloc extends Bloc<StrooptextEvent, StrooptextState> {
     if (state.seconds <= 1) {
       _timer?.cancel();
 
-      emit(state.copyWith(seconds: 0, gameOver: true));
-
+      time = 60;
+      add(InitalStropText());
       return;
     }
 

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,14 +10,17 @@ class StroopEffectScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: BlocBuilder<StrooptextBloc, StrooptextState>(
           builder: (context, state) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [Text("${state.scoreEffect} "), Text("Target: ${state.targetScoreEffect} "),Text("${state.seconds}")],
+              children: [
+                Text("${state.scoreEffect} "),
+                Text("Target: ${state.targetScoreEffect} "),
+                Text("${state.seconds}"),
+              ],
             );
           },
         ),
@@ -33,13 +34,6 @@ class StroopEffectScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               spacing: 15,
               children: [
-                StreamBuilder(//Todo
-                  stream: null,
-                  initialData: 0,
-                  builder: (context, AsyncSnapshot<int> value) {
-                    return Text("${value.data} ", style: TextStyle(fontSize: 18));
-                  },
-                ),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Center(

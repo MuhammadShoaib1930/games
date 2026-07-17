@@ -4,6 +4,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class StroopLogic {
+  // 0 black
+  // 1 white
   static final List<Color> listColor = [
     Colors.black,
     Colors.white,
@@ -30,7 +32,6 @@ class StroopLogic {
     'red',
     'yellow',
   ];
-
   (int, List<int>) generateNew() {
     int n = listColor.length;
     int correct = Random().nextInt(n);
@@ -38,6 +39,7 @@ class StroopLogic {
     while (result.length < 4) {
       result.add(Random().nextInt(n));
     }
+
     return (correct, _mix(result.toList()));
   }
 
@@ -61,5 +63,4 @@ class StroopLogic {
   String mainTextName(List<int> list) {
     return listName[list[Random().nextInt(list.length)]];
   }
-
 }

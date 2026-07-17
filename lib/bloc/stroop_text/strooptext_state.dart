@@ -9,7 +9,8 @@ class StrooptextState extends Equatable {
   final int targetScoreText;
   final int scoreEffect;
   final int seconds;
-  final bool gameOver;
+  final String text;
+
   const StrooptextState({
     this.correctValueIndex = 0,
     this.optionsList = const [0, 0, 0, 0],
@@ -17,8 +18,8 @@ class StrooptextState extends Equatable {
     this.targetScoreEffect = 0,
     this.targetScoreText = 0,
     this.scoreEffect = 0,
-    this.seconds = 0,
-    this.gameOver = false,
+    this.seconds = 60,
+    this.text = "",
   });
 
   @override
@@ -30,7 +31,7 @@ class StrooptextState extends Equatable {
     targetScoreEffect,
     targetScoreText,
     seconds,
-    gameOver,
+    text,
   ];
 
   StrooptextState copyWith({
@@ -41,7 +42,7 @@ class StrooptextState extends Equatable {
     int? targetScoreEffect,
     int? targetScoreText,
     int? seconds,
-    bool? gameOver,
+    String? text,
   }) {
     return StrooptextState(
       correctValueIndex: correctValueIndex ?? this.correctValueIndex,
@@ -51,7 +52,7 @@ class StrooptextState extends Equatable {
       targetScoreEffect: targetScoreEffect ?? this.targetScoreEffect,
       targetScoreText: targetScoreText ?? this.targetScoreText,
       seconds: seconds ?? this.seconds,
-      gameOver: gameOver ?? this.gameOver,
+      text: text ?? this.text,
     );
   }
 }
