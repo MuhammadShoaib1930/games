@@ -36,8 +36,10 @@ class AppRoutes {
       ),
       GoRoute(
         path: stroopEffectScreen,
-        builder: (context, state) =>
-            BlocProvider(create: (context) => StrooptextBloc(), child: StroopEffectScreen()),
+        builder: (context, state) => BlocProvider(
+          create: (context) => StrooptextBloc()..add(InitalStropText()),
+          child: StroopEffectScreen(),
+        ),
       ),
       GoRoute(
         path: stroopTextScreen,

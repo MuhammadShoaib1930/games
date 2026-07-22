@@ -103,7 +103,7 @@ class MagicSquareScreen extends StatelessWidget {
                       child: Text(
                         "Remove",
                         style: TextStyle(
-                          color: (state.isRemove) ? Colors.blue : Colors.grey[300],
+                          color: (state.isRemove) ? Colors.blue : Colors.grey[600],
                           fontSize: (state.isRemove) ? 18 : 14,
                         ),
                       ),

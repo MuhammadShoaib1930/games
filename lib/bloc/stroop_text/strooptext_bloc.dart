@@ -62,7 +62,7 @@ class StrooptextBloc extends Bloc<StrooptextEvent, StrooptextState> {
     int selctedValue = 0;
     List<int> list = [];
     (selctedValue, list) = stroopLogic.generateNew();
-    StroopModel stroopModel = hiveService.getDataFormBox(box: hiveService.stroopBox);
+    StroopModel stroopModel = hiveService.getDataFormBox<StroopModel>(box: hiveService.stroopBox);
 
     emit(
       StrooptextState(
@@ -72,6 +72,7 @@ class StrooptextBloc extends Bloc<StrooptextEvent, StrooptextState> {
         targetScoreText: stroopModel.stropTextMaxScore,
         scoreEffect: 0,
         targetScoreEffect: stroopModel.stropEffectMaxScore,
+
         text: StroopLogic().mainTextName(state.optionsList),
       ),
     );
