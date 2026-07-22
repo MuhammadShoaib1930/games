@@ -64,7 +64,12 @@ class StroopEffectScreen extends StatelessWidget {
                     itemBuilder: (context, index) => Card(
                       child: InkWell(
                         onTap: () => context.read<StrooptextBloc>().add(
-                          Solved(userSelected: state.optionsList[index], isText: false),
+                          Solved(
+                            userSelected: state.optionsList[index],
+                            scoreEffect: state.scoreEffect + 10,
+                            scoreText: state.scoreText,
+
+                          ),
                         ),
                         child: Center(
                           // heightFactor: 100.r,

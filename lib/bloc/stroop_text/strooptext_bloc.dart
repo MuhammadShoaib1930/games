@@ -24,17 +24,12 @@ class StrooptextBloc extends Bloc<StrooptextEvent, StrooptextState> {
 
   FutureOr<void> _solved(Solved event, Emitter<StrooptextState> emit) {
     if (event.userSelected == state.correctValueIndex) {
-      if (event.isText && state.targetScoreText < state.scoreText) {
+      if ((state.targetScoreText < state.scoreText ||
+          state.targetScoreEffect < state.scoreEffect)) {
         hiveService.updateBoxData(
           box: hiveService.stroopBox,
-          score: state.scoreText + 10,
-          isStroopText: true,
-        );
-      } else if (!event.isText && state.targetScoreEffect < state.scoreEffect) {
-        hiveService.updateBoxData(
-          box: hiveService.stroopBox,
-          score: state.scoreEffect + 10,
-          isStroopText: false,
+          scoreText: event.scoreText,
+          scoreEffect: event.scoreEffect,
         );
       }
       int index = 0;
@@ -46,8 +41,8 @@ class StrooptextBloc extends Bloc<StrooptextEvent, StrooptextState> {
         state.copyWith(
           correctValueIndex: index,
           optionsList: list,
-          scoreText: state.scoreText + 10,
-          scoreEffect: state.scoreEffect + 10,
+          scoreText: event.scoreText ,
+          scoreEffect: event.scoreEffect,
           text: StroopLogic().mainTextName(state.optionsList),
         ),
       );

@@ -8,11 +8,12 @@ sealed class StrooptextEvent extends Equatable {
 }
 
 class Solved extends StrooptextEvent {
-  final bool isText;
+  final int scoreText;
+  final int scoreEffect;
   final int userSelected;
-  const Solved({required this.userSelected, required this.isText});
+  const Solved({required this.userSelected, required this.scoreText, required this.scoreEffect});
   @override
-  List<Object> get props => [userSelected, isText];
+  List<Object> get props => [userSelected, scoreEffect, scoreText];
 }
 
 class InitalStropText extends StrooptextEvent {}

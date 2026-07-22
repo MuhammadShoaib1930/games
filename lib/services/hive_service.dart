@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:games/bloc/stroop_text/strooptext_bloc.dart';
 import 'package:games/models/app_settings.dart';
 import 'package:games/models/magic_square.dart';
 import 'package:games/models/stroop_model.dart';
@@ -61,7 +60,8 @@ class HiveService {
     int? tries,
     int? level,
     int? difficulty,
-    bool isStroopText = false,
+    int? scoreText,
+    int? scoreEffect,
   }) {
     if (T == AppSettings) {
       final data = getDataFormBox<T>(box: box) as AppSettings;
@@ -83,8 +83,8 @@ class HiveService {
       box.put(
         stroopBoxName,
         data.copyWith(
-              stropTextMaxScore: (isStroopText) ? score : data.stropTextMaxScore,
-              stropEffectMaxScore: (isStroopText) ? data.stropEffectMaxScore : score,
+              stropTextMaxScore: scoreText,
+              stropEffectMaxScore: scoreEffect
             )
             as T,
       );
